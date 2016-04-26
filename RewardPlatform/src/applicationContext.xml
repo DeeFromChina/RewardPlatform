@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/rewardPlatform?characterEncoding=utf-8" />
+		<property name="username" value="root" />
+		<property name="password" value="945319791" />
+		<property name="maxActive" value="20" />
+		<property name="maxIdle" value="5" />
+		<property name="maxWait" value="1000" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="60" />
+		<property name="logAbandoned" value="true" /> 
+	</bean>
+	
+	<!-- 把数据源注入给Session工厂 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		 <!-- 指定hibernate的配置文件位置 -->
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<!-- 配置映射文件 -->
+		<!-- <property name="mappingResources">
+			<list>
+				<value>Login/model/hbm/user.hbm.xml</value>
+			</list>
+		</property> -->
+	</bean>
+	
+	<!-- 把Session工厂注入给hibernateTemplate -->
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+             <ref bean="sessionFactory" />
+         </property>
+	</bean>
+	
+	<!-- 把DAO注入给Session工厂 -->
+	<bean id="userDao" class="Login.dao.impl.UserDaoimpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<!-- 把Manager注入给DAO -->
+	<bean id="userManager" class="Login.manager.impl.UserManagerImpl">
+		<property name="userDao">
+			<ref local="userDao" />
+		</property>
+	</bean>
+	
+	<!-- 把Action注入给Service -->
+	<bean name="loginAction" class="Login.action.LoginAction">
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+</beans>

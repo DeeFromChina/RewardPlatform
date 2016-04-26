@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="RewardPlatform"
+  id="myeclipse.1461552289892"
+  context-root="/RewardPlatform"
+  j2ee-spec="5.0"
+  archive="RewardPlatform.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
